@@ -103,7 +103,10 @@ def editar_funcionario(request, pk):
 
 def deletar_funcionario(request, pk):
     funcionario = get_object_or_404(Funcionario, pk=pk)
+    usuario = funcionario.usuario
     funcionario.delete()
+    if usuario:
+        usuario.delete()
     return redirect("funcionarios")
 
 

@@ -29,5 +29,5 @@ class Funcionario(models.Model):
         verbose_name='Tipo de Usuário'
     )
 
-    def _str_(self):
+    def __str__(self):
         return self.nome_completo
