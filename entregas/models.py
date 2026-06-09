@@ -11,12 +11,10 @@ class Entrega(models.Model):
         ('CANCELADO', 'Cancelado'),
     ]
 
-    # Relacionamentos que INTEGRAM o sistema todo (Chaves Estrangeiras)
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, verbose_name="Cliente Responsável")
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE, verbose_name="Produto Enviado")
     funcionario_responsavel = models.ForeignKey(Funcionario, on_delete=models.SET_NULL, null=True, verbose_name="Funcionário Responsável")
     
-    # Dados específicos da entrega
     endereco_entrega = models.TextField(verbose_name="Endereço de Entrega")
     data_envio = models.DateField(verbose_name="Data de Envio")
     data_prevista = models.DateField(verbose_name="Data Prevista")

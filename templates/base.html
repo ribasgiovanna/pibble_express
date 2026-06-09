@@ -4,17 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Entregas Logísticas</title>
+    <title>{% block title %}Pibble Express{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
 
     <aside class="sidebar">
         <div>
-            <div class="brand-title">Logística S/A</div>
+            <div class="brand-title">Pibble Express</div>
 
             <nav class="nav-links">
-                <a href="/dashboard/" class="nav-item active">Dashboard</a>
+                <a href="/dashboard/" class="nav-item">Dashboard</a>
                 <a href="/clientes/" class="nav-item">Clientes</a>
                 <a href="/funcionarios/" class="nav-item">Funcionários</a>
                 <a href="/produtos/" class="nav-item">Produtos</a>
@@ -23,7 +23,7 @@
         </div>
 
         <div class="footer-credit">
-            Projeto Engenharia de Software &copy; 2026
+            Projeto desenvolvido por Otávio Fonseca, Giovanna Ribas e Pedro Andrade
         </div>
     </aside>
 
