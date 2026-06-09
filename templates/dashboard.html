@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<header>
+    <h1 class="header-title">Dashboard Integrador</h1>
+    <p class="header-subtitle">
+        Visão geral da operação da Empresa de Serviços de Entrega.
+    </p>
+</header>
+
+<div class="cards-grid">
+    <div class="card">
+        <span class="card-label">Total de Clientes</span>
+        <span class="card-value">{{ total_clientes }}</span>
+    </div>
+
+    <div class="card">
+        <span class="card-label">Produtos em Estoque</span>
+        <span class="card-value">{{ total_produtos }}</span>
+    </div>
+
+    <div class="card">
+        <span class="card-label">Entregas Ativas</span>
+        <span class="card-value text-blue">{{ entregas_ativas }}</span>
+    </div>
+
+    <div class="card">
+        <span class="card-label">Entregas Concluídas</span>
+        <span class="card-value text-green">{{ entregas_concluidas }}</span>
+    </div>
+</div>
+
+<section class="report-section">
+    <div class="report-header">
+        <h2>Histórico Recente de Entregas</h2>
+
+        <button onclick="window.print()" class="btn-print">
+            Gerar Relatório Simples (Imprimir)
+        </button>
+    </div>
+
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Cliente</th>
+                    <th>Produto</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for entrega in ultimas_entregas %}
+                <tr>
+                    <td class="delivery-id">#{{ entrega.id }}</td>
+                    <td>{{ entrega.cliente.nome_completo }}</td>
+                    <td>{{ entrega.produto.nome_produto }}</td>
+                    <td>
+                        <span class="badge
+                        {% if entrega.status_entrega == 'ENTREGUE' %}status-entregue
+                        {% elif entrega.status_entrega == 'EM_TRANSITO' %}status-transito
+                        {% else %}status-pendente{% endif %}">
+                            {{ entrega.get_status_display }}
+                        </span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="empty-message">
+                        Nenhuma entrega registrada no integrador.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

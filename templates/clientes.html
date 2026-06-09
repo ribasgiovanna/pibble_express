@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<header>
+    <h1 class="header-title">Cadastro de Clientes</h1>
+    <p class="header-subtitle">
+        Gerencie os clientes integrados ao sistema de logística.
+    </p>
+</header>
+
+<div class="mudar-layout-grid">
+
+    <div class="card">
+        <h2 class="form-title">
+            {% if editando %}Editar Cliente{% else %}Novo Cliente{% endif %}
+        </h2>
+
+        <form method="POST" class="form-container">
+            {% csrf_token %}
+
+            {% for field in form %}
+            <div class="form-group">
+                <label class="form-label">
+                    {{ field.label }}
+                </label>
+                {{ field }}
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="btn-submit">
+                {% if editando %}Atualizar Cliente{% else %}Salvar Cliente{% endif %}
+            </button>
+
+            {% if editando %}
+            <a href="{% url 'clientes' %}" class="btn-cancel">Cancelar edição</a>
+            {% endif %}
+        </form>
+    </div>
+
+    <div class="report-section">
+        <div class="report-header">
+            <h2>Clientes Cadastrados</h2>
+        </div>
+
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>CPF/CNPJ</th>
+                        <th>Contato</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for cliente in clientes %}
+                    <tr>
+                        <td class="client-name">
+                            {{ cliente.nome_completo }}
+                        </td>
+
+                        <td>
+                            {{ cliente.cpf_cnpj }}
+                        </td>
+
+                        <td>
+                            <div class="contact-email">
+                                {{ cliente.email }}
+                            </div>
+
+                            <div class="contact-phone">
+                                {{ cliente.telefone }}
+                            </div>
+                        </td>
+
+                        <td>
+                            <a
+                                href="{% url 'editar_cliente' cliente.pk %}"
+                                class="edit-link"
+                            >
+                                Editar
+                            </a>
+                            <a
+                                href="{% url 'deletar_cliente' cliente.pk %}"
+                                class="delete-link"
+                                onclick="return confirm('Deseja excluir este cliente?')"
+                            >
+                                Excluir
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="empty-message">
+                            Nenhum cliente cadastrado.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

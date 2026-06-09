@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Entregas Logísticas</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div>
+            <div class="brand-title">Logística S/A</div>
+
+            <nav class="nav-links">
+                <a href="/dashboard/" class="nav-item active">Dashboard</a>
+                <a href="/clientes/" class="nav-item">Clientes</a>
+                <a href="/funcionarios/" class="nav-item">Funcionários</a>
+                <a href="/produtos/" class="nav-item">Produtos</a>
+                <a href="/entregas/" class="nav-item">Entregas</a>
+            </nav>
+        </div>
+
+        <div class="footer-credit">
+            Projeto Engenharia de Software &copy; 2026
+        </div>
+    </aside>
+
+    <main class="main-content">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+</body>
+</html>
