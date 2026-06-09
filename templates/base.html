@@ -14,11 +14,27 @@
             <div class="brand-title">Pibble Express</div>
 
             <nav class="nav-links">
-                <a href="/dashboard/" class="nav-item">Dashboard</a>
-                <a href="/clientes/" class="nav-item">Clientes</a>
-                <a href="/funcionarios/" class="nav-item">Funcionários</a>
-                <a href="/produtos/" class="nav-item">Produtos</a>
-                <a href="/entregas/" class="nav-item">Entregas</a>
+                {% if request.user.is_superuser or request.user.funcionario.tipo_usuario == 'ADM' %}
+                    <a href="/dashboard/" class="nav-item">
+                        Dashboard
+                    </a>
+
+                    <a href="/funcionarios/" class="nav-item">
+                        Funcionários
+                    </a>
+                {% endif %}
+
+                <a href="/clientes/" class="nav-item">
+                    Clientes
+                </a>
+
+                <a href="/produtos/" class="nav-item">
+                    Produtos
+                </a>
+
+                <a href="/entregas/" class="nav-item">
+                    Entregas
+                </a>
             </nav>
         </div>
 

@@ -1,5 +1,7 @@
 from django.utils import timezone
 from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib.auth import authenticate
+from django.contrib.auth import login
 
 from clientes.forms import ClienteForm
 from clientes.models import Cliente
@@ -185,3 +187,22 @@ def deletar_entrega(request, pk):
     entrega = get_object_or_404(Entrega, pk=pk)
     entrega.delete()
     return redirect("entregas")
+
+def login_view(request):
+
+    if request.method == "POST":
+
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+
+        user = authenticate(
+            request,
+            username=username,
+            password=password
+        )
+
+        if user:
+            login(request, user)
+            return redirect("dashboard")
+
+    return render(request, "login.html")

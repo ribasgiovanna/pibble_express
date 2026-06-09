@@ -16,7 +16,7 @@ router.register(r"produtos", ProdutoViewSet)
 router.register(r"entregas", EntregaViewSet)
 
 urlpatterns = [
-    path("", views.dashboard, name="home"),
+    path("", views.login_view, name="login"),
     path("dashboard/", views.dashboard, name="dashboard"),
     path("clientes/", views.clientes, name="clientes"),
     path("clientes/<int:pk>/editar/", views.editar_cliente, name="editar_cliente"),
@@ -32,4 +32,5 @@ urlpatterns = [
     path("entregas/<int:pk>/deletar/", views.deletar_entrega, name="deletar_entrega"),
     path("admin/", admin.site.urls),
     path("api/", include(router.urls)),
+    path('', views.login_view, name='login'),
 ]
