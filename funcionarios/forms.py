@@ -33,7 +33,6 @@ class FuncionarioForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Ao editar, pré-preenche o nome de usuário a partir do User vinculado.
         if self.instance.pk and self.instance.usuario_id:
             self.fields["username"].initial = self.instance.usuario.username
 
@@ -48,7 +47,6 @@ class FuncionarioForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        # A senha só é obrigatória ao cadastrar um novo funcionário (sem User ainda).
         is_novo = not (self.instance.pk and self.instance.usuario_id)
         if is_novo and not cleaned_data.get("password"):
             self.add_error("password", "A senha é obrigatória ao cadastrar um funcionário.")

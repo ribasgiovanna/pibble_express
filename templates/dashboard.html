@@ -3,7 +3,7 @@
 
 {% block content %}
 <header>
-    <h1 class="header-title">Dashboard</h1>
+    <h1 class="header-title">Dashboard Integrador</h1>
     <p class="header-subtitle">
         Visão geral da operação da Empresa de Serviços de Entrega.
     </p>
@@ -62,7 +62,6 @@
                         {% if entrega.status_entrega == 'ENTREGUE' %}status-entregue
                         {% elif entrega.status_entrega == 'EM_TRANSITO' %}status-transito
                         {% else %}status-pendente{% endif %}">
-                            {{ entrega.status_entrega}}
                             {{ entrega.get_status_display }}
                         </span>
                     </td>
