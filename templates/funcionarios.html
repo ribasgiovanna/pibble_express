@@ -19,10 +19,45 @@
         <form method="POST" class="form-container">
             {% csrf_token %}
 
+            {% if form.errors %}
+            <div class="form-alert" role="alert">
+                Não foi possível cadastrar o funcionário. Por favor, confira os erros e tente novamente.
+            </div>
+            {% endif %}
+
+            {% if form.non_field_errors %}
+            <div class="form-alert" role="alert">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
             {% for field in form %}
             <div class="form-group">
                 <label class="form-label">{{ field.label }}</label>
-                {{ field }}
+                {% if field.name == "password" %}
+                <div class="password-field">
+                    {{ field }}
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        aria-label="Mostrar senha"
+                        title="Mostrar senha"
+                        data-password-toggle
+                    >
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </button>
+                </div>
+                {% else %}
+                    {{ field }}
+                {% endif %}
+                {% for error in field.errors %}
+                    <p class="field-error">{{ error }}</p>
+                {% endfor %}
             </div>
             {% endfor %}
 

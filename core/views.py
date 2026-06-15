@@ -2,6 +2,7 @@ from django.utils import timezone
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate
 from django.contrib.auth import login
+from django.db import transaction
 
 from clientes.forms import ClienteForm
 from clientes.models import Cliente
@@ -13,12 +14,29 @@ from produtos.forms import ProdutoForm
 from produtos.models import Produto
 
 
+def salvar_formulario_com_feedback(form):
+    try:
+        with transaction.atomic():
+            form.save()
+    except Exception:
+        form.add_error(
+            None,
+            "Algo deu errado ao salvar. Confira os dados e tente novamente.",
+        )
+        return False
+    return True
+
+
 def atualizar_status_entregas():
     hoje = timezone.localdate()
     Entrega.objects.filter(
         status_entrega="CADASTRADO",
         data_envio__lte=hoje,
     ).update(status_entrega="EM_TRANSITO")
+
+
+def dados_formulario(request):
+    return request.POST if request.method == "POST" else None
 
 
 def dashboard(request):
@@ -36,10 +54,9 @@ def dashboard(request):
 
 
 def clientes(request):
-    form = ClienteForm(request.POST or None)
+    form = ClienteForm(dados_formulario(request))
 
-    if request.method == "POST" and form.is_valid():
-        form.save()
+    if request.method == "POST" and form.is_valid() and salvar_formulario_com_feedback(form):
         return redirect("clientes")
 
     context = {
@@ -51,10 +68,9 @@ def clientes(request):
 
 def editar_cliente(request, pk):
     cliente = get_object_or_404(Cliente, pk=pk)
-    form = ClienteForm(request.POST or None, instance=cliente)
+    form = ClienteForm(dados_formulario(request), instance=cliente)
 
-    if request.method == "POST" and form.is_valid():
-        form.save()
+    if request.method == "POST" and form.is_valid() and salvar_formulario_com_feedback(form):
         return redirect("clientes")
 
     context = {
@@ -72,10 +88,9 @@ def deletar_cliente(request, pk):
 
 
 def funcionarios(request):
-    form = FuncionarioForm(request.POST or None)
+    form = FuncionarioForm(dados_formulario(request))
 
-    if request.method == "POST" and form.is_valid():
-        form.save()
+    if request.method == "POST" and form.is_valid() and salvar_formulario_com_feedback(form):
         return redirect("funcionarios")
 
     context = {
@@ -87,10 +102,9 @@ def funcionarios(request):
 
 def editar_funcionario(request, pk):
     funcionario = get_object_or_404(Funcionario, pk=pk)
-    form = FuncionarioForm(request.POST or None, instance=funcionario)
+    form = FuncionarioForm(dados_formulario(request), instance=funcionario)
 
-    if request.method == "POST" and form.is_valid():
-        form.save()
+    if request.method == "POST" and form.is_valid() and salvar_formulario_com_feedback(form):
         return redirect("funcionarios")
 
     context = {
@@ -111,10 +125,9 @@ def deletar_funcionario(request, pk):
 
 
 def produtos(request):
-    form = ProdutoForm(request.POST or None)
+    form = ProdutoForm(dados_formulario(request))
 
-    if request.method == "POST" and form.is_valid():
-        form.save()
+    if request.method == "POST" and form.is_valid() and salvar_formulario_com_feedback(form):
         return redirect("produtos")
 
     context = {
@@ -126,10 +139,9 @@ def produtos(request):
 
 def editar_produto(request, pk):
     produto = get_object_or_404(Produto, pk=pk)
-    form = ProdutoForm(request.POST or None, instance=produto)
+    form = ProdutoForm(dados_formulario(request), instance=produto)
 
-    if request.method == "POST" and form.is_valid():
-        form.save()
+    if request.method == "POST" and form.is_valid() and salvar_formulario_com_feedback(form):
         return redirect("produtos")
 
     context = {
@@ -148,10 +160,9 @@ def deletar_produto(request, pk):
 
 def entregas(request):
     atualizar_status_entregas()
-    form = EntregaForm(request.POST or None)
+    form = EntregaForm(dados_formulario(request))
 
-    if request.method == "POST" and form.is_valid():
-        form.save()
+    if request.method == "POST" and form.is_valid() and salvar_formulario_com_feedback(form):
         return redirect("entregas")
 
     context = {
@@ -168,10 +179,9 @@ def entregas(request):
 def editar_entrega(request, pk):
     atualizar_status_entregas()
     entrega = get_object_or_404(Entrega, pk=pk)
-    form = EntregaForm(request.POST or None, instance=entrega)
+    form = EntregaForm(dados_formulario(request), instance=entrega)
 
-    if request.method == "POST" and form.is_valid():
-        form.save()
+    if request.method == "POST" and form.is_valid() and salvar_formulario_com_feedback(form):
         return redirect("entregas")
 
     context = {
