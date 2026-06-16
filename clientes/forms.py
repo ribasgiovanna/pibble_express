@@ -37,7 +37,7 @@ class ClienteForm(forms.ModelForm):
                     "data-mask": "cpf-cnpj",
                     "data-max-digits": "14",
                     "inputmode": "numeric",
-                    "placeholder": "000.000.000-00 ou 00.000.000/0000-00",
+                    "placeholder": "CPF ou CNPJ",
                 }
             ),
             "telefone": forms.TextInput(
@@ -54,6 +54,9 @@ class ClienteForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["cpf_cnpj"].widget.attrs.pop("maxlength", None)
         self.fields["telefone"].widget.attrs.pop("maxlength", None)
+        self.fields["nome_completo"].widget.attrs["placeholder"] = "Digite o nome completo"
+        self.fields["email"].widget.attrs["placeholder"] = "exemplo@email.com"
+        self.fields["endereco"].widget.attrs["placeholder"] = "Digite o endereço completo"
 
     def clean_cpf_cnpj(self):
         cpf_cnpj = self.cleaned_data["cpf_cnpj"]

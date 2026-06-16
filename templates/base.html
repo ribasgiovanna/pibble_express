@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Pibble Express{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=3">
 </head>
 <body>
 
@@ -44,14 +44,11 @@
                 <form method="POST" action="{% url 'logout' %}" class="logout-form">
                     {% csrf_token %}
                     <button type="submit" class="logout-button" aria-label="Sair">
-                        <span>Sair</span>
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="M13 4h3a2 2 0 0 1 2 2v14"></path>
-                            <path d="M2 20h3"></path>
-                            <path d="M13 20h9"></path>
-                            <path d="M10 12v.01"></path>
-                            <path d="M13 20V4a2 2 0 0 0-2.75-1.86L5 4v16l5.25 1.86A2 2 0 0 0 13 20Z"></path>
+                        <svg viewBox="0 0 16 16" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"></path>
+                            <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"></path>
                         </svg>
+                        <span>Sair</span>
                     </button>
                 </form>
             {% endif %}

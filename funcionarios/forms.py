@@ -55,7 +55,7 @@ class FuncionarioForm(forms.ModelForm):
                     "data-mask": "cpf-cnpj",
                     "data-max-digits": "14",
                     "inputmode": "numeric",
-                    "placeholder": "000.000.000-00 ou 00.000.000/0000-00",
+                    "placeholder": "CPF ou CNPJ",
                 }
             ),
             "telefone": forms.TextInput(
@@ -72,6 +72,12 @@ class FuncionarioForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["cpf"].widget.attrs.pop("maxlength", None)
         self.fields["telefone"].widget.attrs.pop("maxlength", None)
+        self.fields["username"].widget.attrs["placeholder"] = "Digite o nome de usuário"
+        self.fields["password"].widget.attrs["placeholder"] = "Digite a senha"
+        self.fields["nome_completo"].widget.attrs["placeholder"] = "Digite o nome completo"
+        self.fields["cargo"].widget.attrs["placeholder"] = "Ex.: Entregador"
+        self.fields["email"].widget.attrs["placeholder"] = "exemplo@email.com"
+        self.fields["endereco"].widget.attrs["placeholder"] = "Digite o endereço completo"
         if self.instance.pk and self.instance.usuario_id:
             self.fields["username"].initial = self.instance.usuario.username
             

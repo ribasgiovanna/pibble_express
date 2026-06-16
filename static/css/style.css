@@ -64,7 +64,6 @@
     .logout-form {
         width: 100%;
         display: flex;
-        justify-content: flex-end;
     }
 
     .logout-button {
@@ -72,7 +71,7 @@
         align-items: center;
         justify-content: center;
         gap: 8px;
-        padding: 10px 12px;
+        padding: 8px 14px;
         border: none;
         border-radius: 8px;
         background: transparent;
@@ -86,18 +85,15 @@
 
     .logout-button:hover,
     .logout-button:focus-visible {
-        background-color: #006494;
+        background-color: #C0392B;
         outline: none;
     }
 
     .logout-button svg {
         width: 20px;
         height: 20px;
-        fill: none;
-        stroke: currentColor;
-        stroke-width: 2;
-        stroke-linecap: round;
-        stroke-linejoin: round;
+        flex-shrink: 0;
+        fill: currentColor;
     }
 
     .footer-credit {
