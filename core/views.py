@@ -49,9 +49,23 @@ def dashboard(request):
     context = {
         "total_clientes": Cliente.objects.count(),
         "total_produtos": Produto.objects.count(),
-        "entregas_ativas": Entrega.objects.exclude(status_entrega="ENTREGUE").count(),
-        "entregas_concluidas": Entrega.objects.filter(status_entrega="ENTREGUE").count(),
+        "total_funcionarios": Funcionario.objects.count(),
+
+        "entregas_ativas": Entrega.objects.exclude(
+            status_entrega="ENTREGUE"
+        ).count(),
+
+        "entregas_concluidas": Entrega.objects.filter(
+            status_entrega="ENTREGUE"
+        ).count(),
+
+        "entregas_pendentes": Entrega.objects.filter(
+            status_entrega="CADASTRADO"
+        ).count(),
+
         "ultimas_entregas": ultimas_entregas,
+
+        "data_relatorio": timezone.localdate(),
     }
     return render(request, "dashboard.html", context)
 

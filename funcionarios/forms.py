@@ -13,11 +13,6 @@ def formatar_cpf(valor):
     return f"{numeros[:3]}.{numeros[3:6]}.{numeros[6:9]}-{numeros[9:11]}"
 
 
-def formatar_cnpj(valor):
-    numeros = apenas_numeros(valor)
-    return f"{numeros[:2]}.{numeros[2:5]}.{numeros[5:8]}/{numeros[8:12]}-{numeros[12:14]}"
-
-
 def formatar_telefone(valor):
     numeros = apenas_numeros(valor)
     if len(numeros) == 10:
@@ -52,10 +47,10 @@ class FuncionarioForm(forms.ModelForm):
             "data_contratacao": forms.DateInput(format="%Y-%m-%d", attrs={"type": "date"}),
             "cpf": forms.TextInput(
                 attrs={
-                    "data-mask": "cpf-cnpj",
-                    "data-max-digits": "14",
+                    "data-mask": "cpf",
+                    "data-max-digits": "11",
                     "inputmode": "numeric",
-                    "placeholder": "CPF ou CNPJ",
+                    "placeholder": "000.000.000-00",
                 }
             ),
             "telefone": forms.TextInput(
@@ -72,24 +67,15 @@ class FuncionarioForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["cpf"].widget.attrs.pop("maxlength", None)
         self.fields["telefone"].widget.attrs.pop("maxlength", None)
-        self.fields["username"].widget.attrs["placeholder"] = "Digite o nome de usuário"
-        self.fields["password"].widget.attrs["placeholder"] = "Digite a senha"
-        self.fields["nome_completo"].widget.attrs["placeholder"] = "Digite o nome completo"
-        self.fields["cargo"].widget.attrs["placeholder"] = "Ex.: Entregador"
-        self.fields["email"].widget.attrs["placeholder"] = "exemplo@email.com"
-        self.fields["endereco"].widget.attrs["placeholder"] = "Digite o endereço completo"
         if self.instance.pk and self.instance.usuario_id:
             self.fields["username"].initial = self.instance.usuario.username
             
 
     def clean_cpf(self):
         cpf = self.cleaned_data["cpf"]
-        total_numeros = len(apenas_numeros(cpf))
-        if total_numeros == 11:
-            return formatar_cpf(cpf)
-        if total_numeros == 14:
-            return formatar_cnpj(cpf)
-        raise forms.ValidationError("CPF/CNPJ inválido")
+        if len(apenas_numeros(cpf)) != 11:
+            raise forms.ValidationError("CPF inválido")
+        return formatar_cpf(cpf)
 
     def clean_telefone(self):
         telefone = self.cleaned_data["telefone"]

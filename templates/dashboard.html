@@ -5,11 +5,56 @@
 <header>
     <h1 class="header-title">Dashboard</h1>
     <p class="header-subtitle">
-        Visão geral administrativa da Empresa de Serviços de Entrega.
+        Visão geral da operação da Empresa de Serviços de Entrega.
     </p>
 </header>
 
-<div class="cards-grid">
+<div class="print-area">
+
+    <header>
+        <h1 class="header-title">Dashboard</h1>
+        <p class="header-subtitle">
+            Visão geral da operação da Empresa de Serviços de Entrega.
+        </p>
+    </header>
+
+    <div class="cards-grid">
+        <div class="card">
+            <span class="card-label">Total de Clientes</span>
+            <span class="card-value">{{ total_clientes }}</span>
+        </div>
+
+        <div class="card">
+            <span class="card-label">Produtos em Estoque</span>
+            <span class="card-value">{{ total_produtos }}</span>
+        </div>
+
+        <div class="card">
+            <span class="card-label">Entregas Ativas</span>
+            <span class="card-value text-blue">{{ entregas_ativas }}</span>
+        </div>
+
+        <div class="card">
+            <span class="card-label">Entregas Concluídas</span>
+            <span class="card-value text-green">{{ entregas_concluidas }}</span>
+        </div>
+    </div>
+
+    <section class="report-section">
+        <div class="report-header">
+            <h2>Histórico Recente de Entregas</h2>
+
+            <button onclick="window.print()" class="btn-print">
+                Gerar Relatório Simples (Imprimir)
+            </button>
+        </div>
+
+        <!-- tabela -->
+        ...
+    </section>
+
+</div>
+<!-- <div class="cards-grid">
     <div class="card">
         <span class="card-label">Total de Clientes</span>
         <span class="card-value">{{ total_clientes }}</span>
@@ -39,7 +84,50 @@
             Gerar Relatório Simples (Imprimir)
         </button>
     </div>
+<section class="report-summary">
 
+    <h2>Relatório Operacional</h2>
+
+    <div class="summary-grid">
+
+        <div class="summary-item">
+            <strong>Data:</strong>
+            {{ data_relatorio }}
+        </div>
+
+        <div class="summary-item">
+            <strong>Total de clientes:</strong>
+            {{ total_clientes }}
+        </div>
+
+        <div class="summary-item">
+            <strong>Total de funcionários:</strong>
+            {{ total_funcionarios }}
+        </div>
+
+        <div class="summary-item">
+            <strong>Produtos cadastrados:</strong>
+            {{ total_produtos }}
+        </div>
+
+        <div class="summary-item">
+            <strong>Entregas ativas:</strong>
+            {{ entregas_ativas }}
+        </div>
+
+        <div class="summary-item">
+            <strong>Entregas concluídas:</strong>
+            {{ entregas_concluidas }}
+        </div>
+
+        <div class="summary-item">
+            <strong>Entregas pendentes:</strong>
+            {{ entregas_pendentes }}
+        </div>
+
+    </div>
+
+</section> -->
     <div class="table-container">
         <table class="data-table">
             <thead>
@@ -62,7 +150,8 @@
                         {% if entrega.status_entrega == 'ENTREGUE' %}status-entregue
                         {% elif entrega.status_entrega == 'EM_TRANSITO' %}status-transito
                         {% else %}status-pendente{% endif %}">
-                            {{ entrega.get_status_entrega_display }}
+                            {{ entrega.get_status_display }}
+                            {{entrega.get_status}}
                         </span>
                     </td>
                 </tr>
