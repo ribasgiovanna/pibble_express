@@ -13,6 +13,11 @@ def formatar_cpf(valor):
     return f"{numeros[:3]}.{numeros[3:6]}.{numeros[6:9]}-{numeros[9:11]}"
 
 
+def formatar_cnpj(valor):
+    numeros = apenas_numeros(valor)
+    return f"{numeros[:2]}.{numeros[2:5]}.{numeros[5:8]}/{numeros[8:12]}-{numeros[12:14]}"
+
+
 def formatar_telefone(valor):
     numeros = apenas_numeros(valor)
     if len(numeros) == 10:
@@ -47,10 +52,10 @@ class FuncionarioForm(forms.ModelForm):
             "data_contratacao": forms.DateInput(format="%Y-%m-%d", attrs={"type": "date"}),
             "cpf": forms.TextInput(
                 attrs={
-                    "data-mask": "cpf",
-                    "data-max-digits": "11",
+                    "data-mask": "cpf-cnpj",
+                    "data-max-digits": "14",
                     "inputmode": "numeric",
-                    "placeholder": "000.000.000-00",
+                    "placeholder": "000.000.000-00 ou 00.000.000/0000-00",
                 }
             ),
             "telefone": forms.TextInput(
@@ -73,9 +78,12 @@ class FuncionarioForm(forms.ModelForm):
 
     def clean_cpf(self):
         cpf = self.cleaned_data["cpf"]
-        if len(apenas_numeros(cpf)) != 11:
-            raise forms.ValidationError("CPF inválido")
-        return formatar_cpf(cpf)
+        total_numeros = len(apenas_numeros(cpf))
+        if total_numeros == 11:
+            return formatar_cpf(cpf)
+        if total_numeros == 14:
+            return formatar_cnpj(cpf)
+        raise forms.ValidationError("CPF/CNPJ inválido")
 
     def clean_telefone(self):
         telefone = self.cleaned_data["telefone"]
