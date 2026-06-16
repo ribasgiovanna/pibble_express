@@ -54,10 +54,57 @@
         background-color: #006494;
     }
 
+    .sidebar-footer {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 16px;
+    }
+
+    .logout-form {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .logout-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 10px 12px;
+        border: none;
+        border-radius: 8px;
+        background: transparent;
+        color: #E8F1F2;
+        font-family: inherit;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.2s, color 0.2s;
+    }
+
+    .logout-button:hover,
+    .logout-button:focus-visible {
+        background-color: #006494;
+        outline: none;
+    }
+
+    .logout-button svg {
+        width: 20px;
+        height: 20px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
     .footer-credit {
         font-size: 12px;
         color: #686767;
         padding-top: 16px;
+        text-align: right;
     }
 
     .main-content {

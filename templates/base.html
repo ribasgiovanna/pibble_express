@@ -35,11 +35,30 @@
                 <a href="/entregas/" class="nav-item">
                     Entregas
                 </a>
+
             </nav>
         </div>
 
-        <div class="footer-credit">
-            Projeto desenvolvido por Otávio Fonseca, Giovanna Ribas e Pedro Andrade
+        <div class="sidebar-footer">
+            {% if request.user.is_authenticated %}
+                <form method="POST" action="{% url 'logout' %}" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-button" aria-label="Sair">
+                        <span>Sair</span>
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M13 4h3a2 2 0 0 1 2 2v14"></path>
+                            <path d="M2 20h3"></path>
+                            <path d="M13 20h9"></path>
+                            <path d="M10 12v.01"></path>
+                            <path d="M13 20V4a2 2 0 0 0-2.75-1.86L5 4v16l5.25 1.86A2 2 0 0 0 13 20Z"></path>
+                        </svg>
+                    </button>
+                </form>
+            {% endif %}
+
+            <div class="footer-credit">
+                Projeto desenvolvido por Otávio Fonseca, Giovanna Ribas e Pedro Andrade
+            </div>
         </div>
     </aside>
 
@@ -48,6 +67,6 @@
         {% endblock %}
     </main>
 
-    <script src="{% static 'js/form-masks.js' %}"></script>
+    <script src="{% static 'js/form-masks.js' %}?v=4"></script>
 </body>
 </html>

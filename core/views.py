@@ -2,6 +2,8 @@ from django.utils import timezone
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 from django.db import transaction
 
 from clientes.forms import ClienteForm
@@ -39,6 +41,7 @@ def dados_formulario(request):
     return request.POST if request.method == "POST" else None
 
 
+@login_required
 def dashboard(request):
     atualizar_status_entregas()
     ultimas_entregas = Entrega.objects.select_related("cliente", "produto").order_by("-id")[:10]
@@ -53,6 +56,7 @@ def dashboard(request):
     return render(request, "dashboard.html", context)
 
 
+@login_required
 def clientes(request):
     form = ClienteForm(dados_formulario(request))
 
@@ -66,6 +70,7 @@ def clientes(request):
     return render(request, "clientes.html", context)
 
 
+@login_required
 def editar_cliente(request, pk):
     cliente = get_object_or_404(Cliente, pk=pk)
     form = ClienteForm(dados_formulario(request), instance=cliente)
@@ -81,12 +86,14 @@ def editar_cliente(request, pk):
     return render(request, "clientes.html", context)
 
 
+@login_required
 def deletar_cliente(request, pk):
     cliente = get_object_or_404(Cliente, pk=pk)
     cliente.delete()
     return redirect("clientes")
 
 
+@login_required
 def funcionarios(request):
     form = FuncionarioForm(dados_formulario(request))
 
@@ -100,6 +107,7 @@ def funcionarios(request):
     return render(request, "funcionarios.html", context)
 
 
+@login_required
 def editar_funcionario(request, pk):
     funcionario = get_object_or_404(Funcionario, pk=pk)
     form = FuncionarioForm(dados_formulario(request), instance=funcionario)
@@ -115,6 +123,7 @@ def editar_funcionario(request, pk):
     return render(request, "funcionarios.html", context)
 
 
+@login_required
 def deletar_funcionario(request, pk):
     funcionario = get_object_or_404(Funcionario, pk=pk)
     usuario = funcionario.usuario
@@ -124,6 +133,7 @@ def deletar_funcionario(request, pk):
     return redirect("funcionarios")
 
 
+@login_required
 def produtos(request):
     form = ProdutoForm(dados_formulario(request))
 
@@ -137,6 +147,7 @@ def produtos(request):
     return render(request, "produtos.html", context)
 
 
+@login_required
 def editar_produto(request, pk):
     produto = get_object_or_404(Produto, pk=pk)
     form = ProdutoForm(dados_formulario(request), instance=produto)
@@ -152,12 +163,14 @@ def editar_produto(request, pk):
     return render(request, "produtos.html", context)
 
 
+@login_required
 def deletar_produto(request, pk):
     produto = get_object_or_404(Produto, pk=pk)
     produto.delete()
     return redirect("produtos")
 
 
+@login_required
 def entregas(request):
     atualizar_status_entregas()
     form = EntregaForm(dados_formulario(request))
@@ -176,6 +189,7 @@ def entregas(request):
     return render(request, "entregas.html", context)
 
 
+@login_required
 def editar_entrega(request, pk):
     atualizar_status_entregas()
     entrega = get_object_or_404(Entrega, pk=pk)
@@ -196,6 +210,7 @@ def editar_entrega(request, pk):
     return render(request, "entregas.html", context)
 
 
+@login_required
 def deletar_entrega(request, pk):
     entrega = get_object_or_404(Entrega, pk=pk)
     entrega.delete()
@@ -219,3 +234,8 @@ def login_view(request):
             return redirect("dashboard")
 
     return render(request, "login.html")
+
+
+def logout_view(request):
+    logout(request)
+    return redirect("login")

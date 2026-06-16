@@ -35,31 +35,36 @@ class ClienteForm(forms.ModelForm):
             "cpf_cnpj": forms.TextInput(
                 attrs={
                     "data-mask": "cpf-cnpj",
+                    "data-max-digits": "14",
                     "inputmode": "numeric",
                     "placeholder": "000.000.000-00 ou 00.000.000/0000-00",
-                    "maxlength": "18",
                 }
             ),
             "telefone": forms.TextInput(
                 attrs={
                     "data-mask": "telefone",
+                    "data-max-digits": "11",
                     "inputmode": "numeric",
                     "placeholder": "(00)00000-0000",
-                    "maxlength": "14",
                 }
             ),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["cpf_cnpj"].widget.attrs.pop("maxlength", None)
+        self.fields["telefone"].widget.attrs.pop("maxlength", None)
 
     def clean_cpf_cnpj(self):
         cpf_cnpj = self.cleaned_data["cpf_cnpj"]
         total_numeros = len(apenas_numeros(cpf_cnpj))
         if total_numeros < 11:
-            raise forms.ValidationError("CPF inválido")
+            raise forms.ValidationError("CPF/CNPJ inválido")
         if total_numeros == 11:
             return formatar_cpf(cpf_cnpj)
         if total_numeros == 14:
             return formatar_cnpj(cpf_cnpj)
-        raise forms.ValidationError("CPF inválido")
+        raise forms.ValidationError("CPF/CNPJ inválido")
 
     def clean_telefone(self):
         telefone = self.cleaned_data["telefone"]

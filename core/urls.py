@@ -17,6 +17,7 @@ router.register(r"entregas", EntregaViewSet)
 
 urlpatterns = [
     path("", views.login_view, name="login"),
+    path("logout/", views.logout_view, name="logout"),
     path("dashboard/", views.dashboard, name="dashboard"),
     path("clientes/", views.clientes, name="clientes"),
     path("clientes/<int:pk>/editar/", views.editar_cliente, name="editar_cliente"),

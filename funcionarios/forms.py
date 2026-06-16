@@ -48,25 +48,28 @@ class FuncionarioForm(forms.ModelForm):
             "cpf": forms.TextInput(
                 attrs={
                     "data-mask": "cpf",
+                    "data-max-digits": "11",
                     "inputmode": "numeric",
                     "placeholder": "000.000.000-00",
-                    "maxlength": "14",
                 }
             ),
             "telefone": forms.TextInput(
                 attrs={
                     "data-mask": "telefone",
+                    "data-max-digits": "11",
                     "inputmode": "numeric",
                     "placeholder": "(00)00000-0000",
-                    "maxlength": "14",
                 }
             ),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields["cpf"].widget.attrs.pop("maxlength", None)
+        self.fields["telefone"].widget.attrs.pop("maxlength", None)
         if self.instance.pk and self.instance.usuario_id:
             self.fields["username"].initial = self.instance.usuario.username
+            
 
     def clean_cpf(self):
         cpf = self.cleaned_data["cpf"]

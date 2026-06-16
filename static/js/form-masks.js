@@ -19,6 +19,26 @@ function maskCnpj(value) {
         .replace(/(\d{4})(\d{1,2})$/, "$1-$2");
 }
 
+function maskCpfCnpj(input) {
+    const maxDigits = Number(input.dataset.maxDigits) || 14;
+    const numbers = onlyNumbers(input.value).slice(0, maxDigits);
+    const isCnpj = numbers.length > 11;
+
+    input.value = isCnpj ? maskCnpj(numbers) : maskCpf(numbers);
+    input.dataset.documentType = isCnpj ? "cnpj" : "cpf";
+    input.removeAttribute("maxlength");
+}
+
+function limitDigits(input, value) {
+    const maxDigits = Number(input.dataset.maxDigits);
+
+    if (!maxDigits) {
+        return value;
+    }
+
+    return onlyNumbers(value).slice(0, maxDigits);
+}
+
 function maskPhone(value) {
     const numbers = onlyNumbers(value).slice(0, 11);
     const mainNumberLength = numbers.length > 10 ? 5 : 4;
@@ -39,22 +59,22 @@ function maskPhone(value) {
 
 function applyMask(input) {
     const mask = input.dataset.mask;
-    const numbers = onlyNumbers(input.value);
 
     if (mask === "cpf") {
-        input.value = maskCpf(input.value);
+        input.value = maskCpf(limitDigits(input, input.value));
     }
 
     if (mask === "cpf-cnpj") {
-        input.value = numbers.length > 11 ? maskCnpj(numbers) : maskCpf(numbers);
+        maskCpfCnpj(input);
     }
 
     if (mask === "telefone") {
-        input.value = maskPhone(input.value);
+        input.value = maskPhone(limitDigits(input, input.value));
     }
 }
 
 document.querySelectorAll("[data-mask]").forEach((input) => {
+    input.removeAttribute("maxlength");
     applyMask(input);
     input.addEventListener("input", () => applyMask(input));
 });
