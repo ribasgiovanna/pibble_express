@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}Pibble Express - Entregas{% endblock %}
+
+{% block content %}
+<header>
+    <h1 class="header-title">Cadastro de Entregas</h1>
+    <p class="header-subtitle">
+        Relacione cliente, produto e funcionário responsável pela entrega.
+    </p>
+</header>
+
+<div class="mudar-layout-grid">
+    <div class="card">
+        <h2 class="form-title">
+            {% if editando %}Editar Entrega{% else %}Nova Entrega{% endif %}
+        </h2>
+
+        <form method="POST" class="form-container">
+            {% csrf_token %}
+
+            {% if form.errors %}
+            <div class="form-alert" role="alert">
+                Não foi possível salvar a entrega. Confira os campos destacados e tente novamente.
+            </div>
+            {% endif %}
+
+            {% if form.non_field_errors %}
+            <div class="form-alert" role="alert">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% for field in form %}
+            <div class="form-group">
+                <label class="form-label">{{ field.label }}</label>
+                {{ field }}
+                {% for error in field.errors %}
+                    <p class="field-error">{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="btn-submit">
+                {% if editando %}Atualizar Entrega{% else %}Salvar Entrega{% endif %}
+            </button>
+
+            {% if editando %}
+            <a href="{% url 'entregas' %}" class="btn-cancel">Cancelar edição</a>
+            {% endif %}
+        </form>
+    </div>
+
+    <section class="report-section">
+        <div class="report-header">
+            <h2>Histórico de Entregas</h2>
+
+            <button onclick="window.print()" class="btn-print">
+                Gerar Relatório
+            </button>
+        </div>
+
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Cliente</th>
+                        <th>Produto</th>
+                        <th>Responsável</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for entrega in entregas %}
+                    <tr>
+                        <td class="delivery-id">#{{ entrega.id }}</td>
+                        <td>{{ entrega.cliente.nome_completo }}</td>
+                        <td>{{ entrega.produto.nome_produto }}</td>
+                        <td>{{ entrega.funcionario_responsavel.nome_completo }}</td>
+                        <td>
+                            <span class="badge
+                            {% if entrega.status_entrega == 'ENTREGUE' %}status-entregue
+                            {% elif entrega.status_entrega == 'EM_TRANSITO' %}status-transito
+                            {% else %}status-pendente{% endif %}">
+                                {{ entrega.get_status_entrega_display }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="{% url 'editar_entrega' entrega.pk %}" class="edit-link">Editar</a>
+                            <a
+                                href="{% url 'deletar_entrega' entrega.pk %}"
+                                class="delete-link"
+                                onclick="return confirm('Deseja excluir esta entrega?')"
+                            >
+                                Excluir
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="empty-message">
+                            Nenhuma entrega cadastrada.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+{% endblock %}
