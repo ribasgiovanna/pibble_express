@@ -150,8 +150,7 @@
                         {% if entrega.status_entrega == 'ENTREGUE' %}status-entregue
                         {% elif entrega.status_entrega == 'EM_TRANSITO' %}status-transito
                         {% else %}status-pendente{% endif %}">
-                            {{ entrega.get_status_display }}
-                            {{entrega.get_status}}
+                            {{ entrega.get_status_entrega_display }}
                         </span>
                     </td>
                 </tr>
