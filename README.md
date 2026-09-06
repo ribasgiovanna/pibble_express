@@ -7,6 +7,10 @@ Team project. This is a fork of the original repository
 [`rodavio/pibble_express`](https://github.com/rodavio/pibble_express), kept on
 Giovanna's account for portfolio reference.
 
+| Dashboard | Employees module |
+|---|---|
+| ![Dashboard](docs/dashboard.png) | ![Employee registration](docs/funcionarios.png) |
+
 ## Team and roles
 
 | Person | Contribution |
