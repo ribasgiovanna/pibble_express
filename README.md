@@ -55,12 +55,15 @@ python -m venv .venv
 # Windows: .venv\Scripts\activate | Linux/Mac: source .venv/bin/activate
 pip install -r requirements.txt
 
+cp .env.example .env        # ajuste DJANGO_SECRET_KEY e DJANGO_DEBUG
+
 python manage.py migrate
 python manage.py createsuperuser
 python manage.py runserver
 ```
 
 Acesse `http://127.0.0.1:8000/`. O painel do Django fica em `/admin/` e a API em `/api/`.
+O `db.sqlite3` é criado localmente pelo `migrate` e não é versionado.
 
-> `DEBUG = True` e o `db.sqlite3` versionado são apropriados para trabalho acadêmico;
-> em produção, mover segredos para variáveis de ambiente e desativar o debug.
+> `SECRET_KEY`, `DEBUG` e `ALLOWED_HOSTS` são lidos do ambiente (com fallback de
+> desenvolvimento). Para produção, defina-os no `.env` e use `DJANGO_DEBUG=False`.
