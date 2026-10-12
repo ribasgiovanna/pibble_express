@@ -1,5 +1,7 @@
 # Pibble Express
 
+English · [Português](README.pt-br.md)
+
 A Django web application for delivery management: registration of clients, products,
 employees and deliveries, with authentication and access levels.
 
@@ -15,8 +17,8 @@ Giovanna's account for portfolio reference.
 
 | Person | Contribution |
 |---|---|
-| otávio ([@rodavio](https://github.com/rodavio)) | Project creation and structure, main views, CRUD base |
-| Giovanna Ribas dos Reis ([@ribasgiovanna](https://github.com/ribasgiovanna)) | Employees module and its integration with Deliveries; registration accepting CPF and CNPJ (form + migration); administrative dashboard; form standardization across the four apps and the logout button |
+| Otávio ([@rodavio](https://github.com/rodavio)) | Project creation and structure, main views, CRUD base |
+| Giovanna Ribas dos Reis ([@ribasgiovanna](https://github.com/ribasgiovanna)) | Proposed Django as the framework; Employees module and its integration with Deliveries; registration accepting CPF and CNPJ (form + migration); administrative dashboard; form standardization across the four apps and the logout button |
 | Pedro Henrique de Andrade de Moraes ([profile](https://github.com/pedrooh131313)) | General adjustments |
 
 ## Features
