@@ -25,12 +25,14 @@ da Giovanna como referência de portfólio.
 
 - Autenticação de usuários (login / logout), com `LOGIN_URL` na raiz
 - Níveis de acesso: cada `Funcionario` tem `tipo_usuario` `ADM` (administrador) ou `FUNC`
-  (funcionário), ligado a um `User` do Django por um `OneToOneField`
+  (funcionário), ligado a um `User` do Django por um `OneToOneField`. O dashboard e a gestão
+  de funcionários são restritos a administradores no servidor, e não só escondidos no menu
 - CRUD completo de Clientes, Produtos, Funcionários e Entregas (listar / editar / excluir)
 - Dashboard administrativo
 - Cadastro de funcionário aceitando CPF ou CNPJ
 - Máscaras nos campos dos formulários (`static/js/form-masks.js`)
-- API REST (Django REST Framework) em `/api/`, via `DefaultRouter`, para os quatro recursos
+- API REST (Django REST Framework) em `/api/`, via `DefaultRouter`, para os quatro recursos;
+  exige login, e os dados de funcionários (CPF, endereço) são só para administradores
 
 ## Tecnologias
 
@@ -71,3 +73,22 @@ O `db.sqlite3` é criado localmente pelo `migrate` e não é versionado.
 
 `SECRET_KEY`, `DEBUG` e `ALLOWED_HOSTS` são lidos das variáveis de ambiente (com valores
 padrão para desenvolvimento). Em produção, defina-os no `.env` e use `DJANGO_DEBUG=False`.
+
+## Segurança e testes
+
+Uma revisão do fork encontrou três falhas de controle de acesso, já corrigidas e cobertas
+por testes:
+
+| Problema | Correção |
+|---|---|
+| A API REST aceitava requisições sem login (a permissão padrão do DRF é `AllowAny`) | `IsAuthenticated` por padrão; o endpoint de funcionários é só para administradores |
+| Usuários `FUNC` abriam a gestão de funcionários digitando o endereço, porque a restrição estava só no menu | Decorator `admin_obrigatorio` no dashboard e nas telas de funcionários; cada perfil vai para a sua página inicial depois do login |
+| Os registros eram excluídos por links simples (GET), que outro site poderia disparar em nome de quem está logado (CSRF) | A exclusão aceita só POST, por formulários com token CSRF |
+
+```bash
+python manage.py test
+```
+
+São 21 testes: formatação dos formulários (CPF/CNPJ, telefone), login e logout, níveis de
+acesso, exclusão só por POST com proteção CSRF e permissões da API. Os testes de controle
+de acesso foram conferidos contra o código anterior, no qual falham.

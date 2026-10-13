@@ -100,13 +100,10 @@
                             >
                                 Editar
                             </a>
-                            <a
-                                href="{% url 'deletar_cliente' cliente.pk %}"
-                                class="delete-link"
-                                onclick="return confirm('Deseja excluir este cliente?')"
-                            >
-                                Excluir
-                            </a>
+                            <form method="post" action="{% url 'deletar_cliente' cliente.pk %}" class="delete-form">
+                                {% csrf_token %}
+                                <button type="submit" class="delete-link" onclick="return confirm('Deseja excluir este cliente?')">Excluir</button>
+                            </form>
                         </td>
                     </tr>
                     {% empty %}

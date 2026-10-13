@@ -25,12 +25,14 @@ Giovanna's account for portfolio reference.
 
 - User authentication (login / logout) with `LOGIN_URL` at the root
 - Access levels: each `Funcionario` has `tipo_usuario` `ADM` (administrator) or `FUNC`
-  (employee), linked to a Django `User` through a `OneToOneField`
+  (employee), linked to a Django `User` through a `OneToOneField`. The dashboard and employee
+  management are restricted to administrators on the server, not only hidden in the menu
 - Full CRUD for Clients, Products, Employees and Deliveries (list / edit / delete)
 - Administrative dashboard
 - Employee registration accepting either CPF or CNPJ
 - Form input masks on the front end (`static/js/form-masks.js`)
-- REST API (Django REST Framework) exposed at `/api/` via `DefaultRouter` for the four resources
+- REST API (Django REST Framework) exposed at `/api/` via `DefaultRouter` for the four resources;
+  it requires login, and employee data (CPF, address) is available to administrators only
 
 ## Tech
 
@@ -71,3 +73,21 @@ Open `http://127.0.0.1:8000/`. The Django admin is at `/admin/` and the API at `
 
 `SECRET_KEY`, `DEBUG` and `ALLOWED_HOSTS` are read from the environment (with a
 development fallback). For production, set them in `.env` and use `DJANGO_DEBUG=False`.
+
+## Security and tests
+
+A review of the fork found three access-control gaps, now fixed and covered by tests:
+
+| Issue | Fix |
+|---|---|
+| The REST API accepted requests without login (DRF's default permission is `AllowAny`) | `IsAuthenticated` by default; the employees endpoint is admin-only |
+| `FUNC` users could open employee management by typing the URL, since the restriction was only in the menu | `admin_obrigatorio` decorator on the dashboard and employee views; each profile lands on its own start page after login |
+| Records were deleted through plain links (GET), which another site could trigger on behalf of a logged-in user (CSRF) | Deletes accept POST only, through forms with a CSRF token |
+
+```bash
+python manage.py test
+```
+
+21 tests cover form formatting (CPF/CNPJ, phone), login and logout, access levels, POST-only
+deletes with CSRF protection and API permissions. The access-control tests were checked
+against the previous code, where they fail.

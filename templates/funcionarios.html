@@ -100,13 +100,10 @@
                         </td>
                         <td>
                             <a href="{% url 'editar_funcionario' funcionario.pk %}" class="edit-link">Editar</a>
-                            <a
-                                href="{% url 'deletar_funcionario' funcionario.pk %}"
-                                class="delete-link"
-                                onclick="return confirm('Deseja excluir este funcionário?')"
-                            >
-                                Excluir
-                            </a>
+                            <form method="post" action="{% url 'deletar_funcionario' funcionario.pk %}" class="delete-form">
+                                {% csrf_token %}
+                                <button type="submit" class="delete-link" onclick="return confirm('Deseja excluir este funcionário?')">Excluir</button>
+                            </form>
                         </td>
                     </tr>
                     {% empty %}

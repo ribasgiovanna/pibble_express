@@ -3,6 +3,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
+from django.views.decorators.http import require_POST
 from django.contrib.auth import logout
 from django.db import transaction
 
@@ -14,6 +16,27 @@ from funcionarios.forms import FuncionarioForm
 from funcionarios.models import Funcionario
 from produtos.forms import ProdutoForm
 from produtos.models import Produto
+
+
+def eh_administrador(user):
+    """ADM é quem tem tipo_usuario 'ADM' (ou o superusuário criado pelo createsuperuser)."""
+    if user.is_superuser:
+        return True
+    funcionario = getattr(user, "funcionario", None)
+    return funcionario is not None and funcionario.tipo_usuario == "ADM"
+
+
+def admin_obrigatorio(view):
+    """Restringe a view a administradores; o menu já esconde esses links, mas a regra
+    precisa valer também para quem digita o endereço direto no navegador."""
+    @login_required
+    def _view(request, *args, **kwargs):
+        if not eh_administrador(request.user):
+            raise PermissionDenied
+        return view(request, *args, **kwargs)
+    _view.__name__ = view.__name__
+    _view.__doc__ = view.__doc__
+    return _view
 
 
 def salvar_formulario_com_feedback(form):
@@ -41,7 +64,7 @@ def dados_formulario(request):
     return request.POST if request.method == "POST" else None
 
 
-@login_required
+@admin_obrigatorio
 def dashboard(request):
     atualizar_status_entregas()
     ultimas_entregas = Entrega.objects.select_related("cliente", "produto").order_by("-id")[:10]
@@ -101,13 +124,14 @@ def editar_cliente(request, pk):
 
 
 @login_required
+@require_POST
 def deletar_cliente(request, pk):
     cliente = get_object_or_404(Cliente, pk=pk)
     cliente.delete()
     return redirect("clientes")
 
 
-@login_required
+@admin_obrigatorio
 def funcionarios(request):
     form = FuncionarioForm(dados_formulario(request))
 
@@ -121,7 +145,7 @@ def funcionarios(request):
     return render(request, "funcionarios.html", context)
 
 
-@login_required
+@admin_obrigatorio
 def editar_funcionario(request, pk):
     funcionario = get_object_or_404(Funcionario, pk=pk)
     form = FuncionarioForm(dados_formulario(request), instance=funcionario)
@@ -137,7 +161,8 @@ def editar_funcionario(request, pk):
     return render(request, "funcionarios.html", context)
 
 
-@login_required
+@admin_obrigatorio
+@require_POST
 def deletar_funcionario(request, pk):
     funcionario = get_object_or_404(Funcionario, pk=pk)
     usuario = funcionario.usuario
@@ -178,6 +203,7 @@ def editar_produto(request, pk):
 
 
 @login_required
+@require_POST
 def deletar_produto(request, pk):
     produto = get_object_or_404(Produto, pk=pk)
     produto.delete()
@@ -225,6 +251,7 @@ def editar_entrega(request, pk):
 
 
 @login_required
+@require_POST
 def deletar_entrega(request, pk):
     entrega = get_object_or_404(Entrega, pk=pk)
     entrega.delete()
@@ -245,7 +272,8 @@ def login_view(request):
 
         if user:
             login(request, user)
-            return redirect("dashboard")
+            # Funcionários comuns não têm acesso ao dashboard administrativo.
+            return redirect("dashboard" if eh_administrador(user) else "entregas")
 
     return render(request, "login.html")
 

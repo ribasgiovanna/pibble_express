@@ -82,13 +82,10 @@
                         <td>R$ {{ produto.valor }}</td>
                         <td>
                             <a href="{% url 'editar_produto' produto.pk %}" class="edit-link">Editar</a>
-                            <a
-                                href="{% url 'deletar_produto' produto.pk %}"
-                                class="delete-link"
-                                onclick="return confirm('Deseja excluir este produto?')"
-                            >
-                                Excluir
-                            </a>
+                            <form method="post" action="{% url 'deletar_produto' produto.pk %}" class="delete-form">
+                                {% csrf_token %}
+                                <button type="submit" class="delete-link" onclick="return confirm('Deseja excluir este produto?')">Excluir</button>
+                            </form>
                         </td>
                     </tr>
                     {% empty %}

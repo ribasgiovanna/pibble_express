@@ -92,13 +92,10 @@
                         </td>
                         <td>
                             <a href="{% url 'editar_entrega' entrega.pk %}" class="edit-link">Editar</a>
-                            <a
-                                href="{% url 'deletar_entrega' entrega.pk %}"
-                                class="delete-link"
-                                onclick="return confirm('Deseja excluir esta entrega?')"
-                            >
-                                Excluir
-                            </a>
+                            <form method="post" action="{% url 'deletar_entrega' entrega.pk %}" class="delete-form">
+                                {% csrf_token %}
+                                <button type="submit" class="delete-link" onclick="return confirm('Deseja excluir esta entrega?')">Excluir</button>
+                            </form>
                         </td>
                     </tr>
                     {% empty %}

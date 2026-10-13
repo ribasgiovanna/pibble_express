@@ -130,3 +130,8 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
 LOGIN_URL = "/"
+
+# A API exige usuário autenticado (o padrão do DRF seria liberar para qualquer pessoa).
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
+}
