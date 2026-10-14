@@ -2,6 +2,8 @@
 
 [English](README.md) · Português
 
+[![Tests](https://github.com/ribasgiovanna/pibble_express/actions/workflows/tests.yml/badge.svg)](https://github.com/ribasgiovanna/pibble_express/actions/workflows/tests.yml)
+
 Aplicação web em Django para gestão de entregas: cadastro de clientes, produtos,
 funcionários e entregas, com autenticação e níveis de acesso.
 
@@ -88,6 +90,8 @@ por testes:
 ```bash
 python manage.py test
 ```
+
+A suíte também roda a cada push e pull request (GitHub Actions).
 
 São 21 testes: formatação dos formulários (CPF/CNPJ, telefone), login e logout, níveis de
 acesso, exclusão só por POST com proteção CSRF e permissões da API. Os testes de controle

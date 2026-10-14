@@ -2,6 +2,8 @@
 
 English · [Português](README.pt-br.md)
 
+[![Tests](https://github.com/ribasgiovanna/pibble_express/actions/workflows/tests.yml/badge.svg)](https://github.com/ribasgiovanna/pibble_express/actions/workflows/tests.yml)
+
 A Django web application for delivery management: registration of clients, products,
 employees and deliveries, with authentication and access levels.
 
@@ -87,6 +89,8 @@ A review of the fork found three access-control gaps, now fixed and covered by t
 ```bash
 python manage.py test
 ```
+
+The suite also runs on every push and pull request (GitHub Actions).
 
 21 tests cover form formatting (CPF/CNPJ, phone), login and logout, access levels, POST-only
 deletes with CSRF protection and API permissions. The access-control tests were checked
